@@ -10,33 +10,79 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client(intents=discord.Intents.default())
 
-async def fetch_menu_and_print():
+dia = 0
+
+ru = [[],  # RU1: Almoço e Janta
+      [],
+      [],       # RU3: Não tem janta
+      [],
+      [],
+      []]
+
+SERVER_TESTE = 0
+SERVER_MAGOS = 1
+
+async def announce(string):
+    for guild in client.guilds:
+        await guild.text_channels[0].send(string)
+
+async def print_test(string):
+    await client.guilds[0].text_channels[0].send(string)
+
+async def fetch_menu():
+    if dia > 4:
+        return null
+
     url = "https://www.ufrgs.br/prae/cardapio-ru/"
     response = requests.get(url)
     html_content = response.text
     soup = BeautifulSoup(html_content, 'html.parser')
     tables = soup.find_all('table')
-    menu_table = tables[0]
-    menu = []
-    for row in menu_table.find_all('tr'):
-        columns = row.find_all('td')
-        menu_item = [column.text.strip() for column in columns]
-        print(menu_item)
-        menu.append(menu_item)
-    # Check if menu is not empty before printing
-    day_menu = ""
-    if menu:
-        for i in range(10):
-            day_menu += menu[i][datetime.date.today().weekday()] + '\n'
-    else:
-        print("Menu is empty.")
-    for guild in client.guilds:
-        await guild.text_channels[0].send(day_menu)
 
+    parsed_menus = []
+
+    for i in range(11):
+        current_menu = tables[i]
+        transposed_menu = []
+        parsed_menu = [[],[],[],[],[]]
+        for row in current_menu.find_all('tr'):
+            columns = row.find_all('td')
+            menu_item = [element.text.strip() for element in columns]
+            transposed_menu.append(menu_item)
+        for j in range(len(transposed_menu)):
+            for k in range(5):
+                parsed_menu[k].append(transposed_menu[j][k])
+        
+        parsed_menus.append(parsed_menu)
+
+    ru[0].append(parsed_menus[0])
+    ru[0].append(parsed_menus[1])
+    ru[1].append(parsed_menus[2])
+    ru[1].append(parsed_menus[3])
+    ru[2].append(parsed_menus[4])
+    
+    for i in range(3, 6):
+        ru[i].append(parsed_menus[2*i-1])
+        ru[i].append(parsed_menus[2*i])
+
+async def print_day_menu(num_ru, ehAlmoco, dia, guilda):
+   
+    if dia > 4:
+        return
+
+    ehAlmoco = 0 if ehAlmoco else 1
+    day_menu = ''
+    for i in range(len(ru[0][0][0])):
+        day_menu += ru[num_ru-1][ehAlmoco][dia][i] + '\n'
+
+    await client.guilds[guilda].text_channels[0].send(day_menu)
 
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    await fetch_menu_and_print()
+    await announce("Acordei, gurizada")
+    dia = datetime.date.today().weekday()
+    await fetch_menu()
+    await print_day_menu(6, True, dia, SERVER_MAGOS)
 
 client.run(TOKEN)
