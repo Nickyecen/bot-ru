@@ -12,12 +12,12 @@ client = discord.Client(intents=discord.Intents.default())
 
 dia = 0
 
-ru = [[],  # RU1: Almoço e Janta
-      [],
-      [],       # RU3: Não tem janta
-      [],
-      [],
-      []]
+ru = [[[],[]],  # RU1: Almoço e Janta
+      [[],[]],
+      [[]],       # RU3: Não tem janta
+      [[],[]],
+      [[],[]],
+      [[],[]]]
 
 SERVER_TESTE = 0
 SERVER_MAGOS = 1
@@ -41,7 +41,9 @@ async def fetch_menu():
 
     parsed_menus = []
 
-    for i in range(11):
+    for i in range(22):
+        if i%2 == 1:
+            continue
         current_menu = tables[i]
         transposed_menu = []
         parsed_menu = [[],[],[],[],[]]
@@ -55,15 +57,15 @@ async def fetch_menu():
         
         parsed_menus.append(parsed_menu)
 
-    ru[0].append(parsed_menus[0])
-    ru[0].append(parsed_menus[1])
-    ru[1].append(parsed_menus[2])
-    ru[1].append(parsed_menus[3])
-    ru[2].append(parsed_menus[4])
+    ru[0][0] = parsed_menus[0]
+    ru[0][1] = parsed_menus[1]
+    ru[1][0] = parsed_menus[2]
+    ru[1][1] = parsed_menus[3]
+    ru[2][0] = parsed_menus[4]
     
     for i in range(3, 6):
-        ru[i].append(parsed_menus[2*i-1])
-        ru[i].append(parsed_menus[2*i])
+        ru[i][0] = parsed_menus[2*i-1]
+        ru[i][1] = parsed_menus[2*i]
 
 async def print_day_menu(num_ru, ehAlmoco, dia, guilda):
    
@@ -84,5 +86,5 @@ async def on_ready():
     dia = datetime.date.today().weekday()
     await fetch_menu()
     await print_day_menu(6, True, dia, SERVER_MAGOS)
-
+    
 client.run(TOKEN)
