@@ -82,6 +82,11 @@ async def print_day_menu(num_ru, ehAlmoco, dia, guilda):
 
     await client.guilds[guilda].text_channels[0].send(day_menu)
 
+    #MUDANÇA DO BER vv (Adicionar o valendometro)
+    menu = get_menu("valendometro/menu.csv")
+    valendometro = get_valendometro(menu, day_menu)
+    await client.guilds[guilda].text_channels[0].send(f"Valendometro: {valendometro['valendometro']}\nPolemometro: {valendometro['polemometro']}")
+
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
@@ -89,10 +94,5 @@ async def on_ready():
     dia = datetime.date.today().weekday()
     await fetch_menu()
     await print_day_menu(6, True, dia, SERVER_MAGOS)
-
-    #MUDAÇA DO BER vv (Printar Valendometro)
-    valendometro = get_valendometro("valendometro/Valendometro.csv")
-    mensagem = "VALENDOMTERO = " + str(valendometro["valendometro"]) + "\nPOLEMOMETRO = " + str(valendometro["polemometro"]) + "\nRECONHECIDOS = " + str(valendometro["reconhecidos"])
-    await announce(mensagem)
     
 client.run(TOKEN)
