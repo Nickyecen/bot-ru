@@ -5,6 +5,9 @@ import datetime
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
+#MUDANÇA DO BER vv (Importar o valendometro)
+from valendometro.dic import *
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -86,5 +89,10 @@ async def on_ready():
     dia = datetime.date.today().weekday()
     await fetch_menu()
     await print_day_menu(6, True, dia, SERVER_MAGOS)
+
+    #MUDAÇA DO BER vv (Printar Valendometro)
+    valendometro = get_valendometro("valendometro/Valendometro.csv")
+    mensagem = "VALENDOMTERO = " + str(valendometro["valendometro"]) + "\nPOLEMOMETRO = " + str(valendometro["polemometro"]) + "\nRECONHECIDOS = " + str(valendometro["reconhecidos"])
+    await announce(mensagem)
     
 client.run(TOKEN)
