@@ -43,7 +43,7 @@ def get_valendometro(menu, cardapio):
     for prato in pratos:
         if prato in menu:
             valendometro += float(menu[prato]["valendometro"])
-            polemometro += float(menu[prato]["polemometro"])
+            polemometro += float(menu[prato]["polemometro"]/valendometro)
             reconhecidos += 1
 
     #Evita divisão por zero
@@ -54,6 +54,6 @@ def get_valendometro(menu, cardapio):
     valendometro = round(valendometro/reconhecidos, 1)
     
     #Faz algumas coisas a mais pro polemometro ir de 0-10
-    polemometro = round(((polemometro/reconhecidos)/valendometro) * 10, 1)
+    polemometro = round((polemometro/reconhecidos) * 10, 1)
 
     return {"valendometro" : valendometro, "polemometro" : polemometro, "reconhecidos" : reconhecidos}

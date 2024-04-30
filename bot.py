@@ -122,7 +122,7 @@ async def print_day_menu(num_ru, ehAlmoco, dia, guilda):
     #MUDANÇA DO BER vv (Adicionar o valendometro)
     menu = get_menu("valendometro/Valendometro.csv")
     valendometro = get_valendometro(menu, day_menu)
-    await client.guilds[guilda].text_channels[0].send(f"Valendometro: {valendometro['valendometro']}\nPolemometro: {valendometro['polemometro']}")
+    await client.guilds[guilda].text_channels[0].send(f"Valendometro: {valendometro['valendometro']}\nPolemometro: {valendometro['polemometro']}\nReconhecidos: {valendometro['reconhecidos']}")
 
 # Função realizada pelo bot ao ligar
 @client.event
