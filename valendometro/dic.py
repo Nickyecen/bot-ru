@@ -57,5 +57,3 @@ def get_valendometro(menu, cardapio):
     polemometro = round((polemometro/reconhecidos), 1)
 
     return {"valendometro" : valendometro, "polemometro" : polemometro, "reconhecidos" : reconhecidos}
-
-print(get_menu("menu.csv"))
