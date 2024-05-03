@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 #MUDANÇA DO BER vv (Importar o valendometro)
-from valendometro.dic import *
+from valendometro.opinioes import *
 
 # Carrega Token de ativação do bot
 load_dotenv()
@@ -120,8 +120,7 @@ async def print_day_menu(num_ru, ehAlmoco, dia, guilda):
     await client.guilds[guilda].text_channels[0].send(day_menu)
 
     #MUDANÇA DO BER vv (Adicionar o valendometro)
-    menu = get_menu("valendometro/menu.csv")
-    valendometro = get_valendometro(menu, day_menu)
+    valendometro = get_today_opinion(day_menu, "valendometro/menu.csv")
     await client.guilds[guilda].text_channels[0].send(f"Valendometro: {valendometro['valendometro']}\nPolemometro: {valendometro['polemometro']}\nReconhecidos: {valendometro['reconhecidos']}")
 
 # Função realizada pelo bot ao ligar
