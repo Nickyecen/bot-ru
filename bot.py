@@ -120,7 +120,7 @@ async def print_day_menu(num_ru, ehAlmoco, dia, guilda):
     await client.guilds[guilda].text_channels[0].send(day_menu)
 
     #MUDANÇA DO BER vv (Adicionar o valendometro)
-    menu = get_menu("valendometro/Valendometro.csv")
+    menu = get_menu("valendometro/menu.csv")
     valendometro = get_valendometro(menu, day_menu)
     await client.guilds[guilda].text_channels[0].send(f"Valendometro: {valendometro['valendometro']}\nPolemometro: {valendometro['polemometro']}\nReconhecidos: {valendometro['reconhecidos']}")
 
