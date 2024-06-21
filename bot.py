@@ -82,11 +82,11 @@ async def fetch_menu():
     organized_menus = []
 
     num_menus = len(tables)
-    if num_menus == 11:
+    if num_menus <= 11:
         for menu in tables:
             await organize(menu, organized_menus)
     else:
-        for i in range(0, 22, 2):
+        for i in range(0, num_menus, 2):
             await organize(tables[i], organized_menus)
            
     # Coloca na tabela do RU
@@ -98,8 +98,11 @@ async def fetch_menu():
    
     # Pega almoço e janta
     for i in range(3, 6):
-        ru[i][0] = organized_menus[2*i-1]
-        ru[i][1] = organized_menus[2*i]
+        try:
+            ru[i][0] = organized_menus[2*i-1]
+            ru[i][1] = organized_menus[2*i]
+        except:
+            continue
 
 # print_day_menu: Number Bboolean Boolean Number -> Void
 # Obj.: Dado o número do RU, se é ou não almoço, o dia da
@@ -129,7 +132,11 @@ async def on_ready():
     print(f'{client.user} has connected to Discord!')
     dia = datetime.date.today().weekday()
     await fetch_menu()
-    await print_day_menu(6, True, dia, SERVER_MAGOS)
+    try:
+        await print_day_menu(3, True, dia, SERVER_MAGOS)
+    except:
+        print('Erro: pegando menu 3')
+        await print_day_menu(1, True, dia, SERVER_MAGOS)
     #await print_day_menu(6, True, dia, SERVER_TESTE)
 
 # Liga o bot
